@@ -3,7 +3,8 @@ import crypto from 'crypto';
 const { VITE_USERNAME_MAX_LENGTH, VITE_USERNAME_MIN_LENGTH, VITE_PASSWORD_MAX_LENGTH, VITE_PASSWORD_MIN_LENGTH, VITE_COMMUNITY_NAME, VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT, VITE_ENCRYPT_SECRET } = import.meta.env;
 
 export async function login(formData: FormData) {
-    const loginUrl: URL = new URL('https://' + VITE_BACKEND_DOMAIN + ':' + VITE_BACKEND_PORT + '/login');
+    const port: string = VITE_BACKEND_PORT ? ':' + VITE_BACKEND_PORT : '';
+    const loginUrl: URL = new URL('https://' + VITE_BACKEND_DOMAIN + port + '/login');
     // encrypt password for transmission
     const iv = crypto.randomBytes(16);
     const cipher = crypto.createCipheriv('aes-256-cbc', VITE_ENCRYPT_SECRET, iv);
