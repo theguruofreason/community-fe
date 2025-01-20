@@ -1,4 +1,4 @@
-const { VITE_COMMUNITY_NAME } = process.env;
+const { VITE_COMMUNITY_NAME } = import.meta.env;
 
 export default function LandingPage(props) {
     return (

@@ -1,9 +1,9 @@
 import crypto from 'crypto';
-import { useFormStatus } from "react-dom";
+import { useFormStatus } from 'react-dom';
 
 const { VITE_USERNAME_MAX_LENGTH, VITE_USERNAME_MIN_LENGTH, VITE_PASSWORD_MAX_LENGTH, VITE_PASSWORD_MIN_LENGTH, VITE_COMMUNITY_NAME, VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT, VITE_ENCRYPT_SECRET } = import.meta.env;
 
-export async function login(event) {
+export async function login(formData: FormData) {
     if (!formData.has('username') || !formData.has('password')) {
         console.error("Login failed: username and password required.");
         return null;
@@ -28,13 +28,14 @@ export async function login(event) {
 }
 
 function LoginButton() {
-    const { pending } = useFormStatus();
+    const { status } = useFormStatus();
+    return <button disabled={status.pending}>Login</button>;
 }
 
 export default function Login() {
     return (
         <div className='Login'>
-            <form onSubmit={login} method='POST'>
+            <form action="login" method='POST'>
                 <h2>Welcome to {VITE_COMMUNITY_NAME}!</h2>
                 <label htmlFor="username">username</label>
                 <input className="formItem" type="text" name="username" id="username" maxLength={VITE_USERNAME_MAX_LENGTH} minLength={VITE_USERNAME_MIN_LENGTH}></input>
