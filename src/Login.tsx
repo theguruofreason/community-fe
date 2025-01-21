@@ -1,5 +1,6 @@
 import crypto from 'crypto';
 import { useFormStatus } from 'react-dom';
+import { useNavigate } from 'react-router-dom';
 
 const { VITE_USERNAME_MAX_LENGTH, VITE_USERNAME_MIN_LENGTH, VITE_PASSWORD_MAX_LENGTH, VITE_PASSWORD_MIN_LENGTH, VITE_COMMUNITY_NAME, VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT, VITE_ENCRYPT_SECRET } = import.meta.env;
 
@@ -28,8 +29,16 @@ export async function login(formData: FormData) {
 }
 
 function LoginButton() {
-    const { status } = useFormStatus();
-    return <button disabled={status.pending}>Login</button>;
+    const status = useFormStatus();
+    return <button className="login-register" disabled={status.pending}>Login</button>;
+}
+
+function RegisterButton() {
+    const navigate = useNavigate();
+    function clickRegister() { navigate("/register"); }
+    return (
+        <button className="login-register" onClick={clickRegister}>Register</button>
+    )
 }
 
 export default function Login() {
@@ -43,8 +52,10 @@ export default function Login() {
                 <label htmlFor="password">password</label>
                 <input className="formItem" type="password" name="password" id="password" maxLength={VITE_PASSWORD_MAX_LENGTH} minLength={VITE_PASSWORD_MIN_LENGTH}></input>
                 <br />
-                <LoginButton />
-                <input className="formButton" type="button" value="Register"></input>
+                <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
+                    <LoginButton />
+                    <RegisterButton />
+                </div>
             </form>
         </div>
     )
