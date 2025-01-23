@@ -31,6 +31,7 @@ export async function login(event: React.FormEvent) {
         console.error("Login failure");
         return;
     }
+    resJson = await res.json();
 }
 
 function LoginButton() {
