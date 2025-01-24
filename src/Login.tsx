@@ -32,6 +32,7 @@ export async function login(event: React.FormEvent) {
         return;
     }
     const resJson = await res.json();
+    const jwt = resJson.jwt;
 }
 
 function LoginButton() {
