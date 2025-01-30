@@ -45,3 +45,15 @@
   margin-left: 0.5em;
   margin-right: 0.5em;
 }
+
+form > label {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  text-align: left;
+  margin-bottom: 0.5em;
+}
+
+label > span {
+  margin-right: 1em;
+}
