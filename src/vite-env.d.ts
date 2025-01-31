@@ -9,6 +9,7 @@ interface ImportMetaEnv {
     readonly VITE_PASSWORD_MAX_LENGTH: string,
     readonly VITE_PASSWORD_MIN_LENGTH: string,
     readonly VITE_ENCRYPT_SECRET: string,
+    readonly VITE_SALT_ROUNDS: string,
 }
 
 interface ImportMeta {
