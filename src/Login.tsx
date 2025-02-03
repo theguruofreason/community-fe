@@ -33,6 +33,7 @@ export async function login(event: React.FormEvent) {
     }
     const resJson = await res.json();
     const jwt = resJson.jwt;
+    window.sessionStorage.token = jwt;
 }
 
 function LoginButton() {
