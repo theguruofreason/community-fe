@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import { useFormStatus } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,21 +18,13 @@ export async function login(event: React.FormEvent) {
 
     const port: string = VITE_BACKEND_PORT ? ':' + VITE_BACKEND_PORT : '';
     const loginUrl: URL = new URL('https://' + VITE_BACKEND_DOMAIN + port + '/login');
-    // encrypt password for transmission
-    const iv = crypto.randomBytes(16);
-    const cipher = crypto.createCipheriv('aes-256-cbc', VITE_ENCRYPT_SECRET, iv);
-    let encryptedPass = cipher.update(password, 'utf-8', 'hex');
-    encryptedPass += cipher.final('hex');
-    const requestBody = { uname: username, pass: encryptedPass }
+    const requestBody = { uname: username, pass: password }
     const request: Request = new Request(loginUrl, { method: 'POST', body: JSON.stringify(requestBody) })
     const res = await fetch(request);
     if (!res.ok) {
         console.error("Login failure");
         return;
     }
-    const resJson = await res.json();
-    const jwt = resJson.jwt;
-    window.sessionStorage.token = jwt;
 }
 
 function LoginButton() {
@@ -55,10 +46,10 @@ export default function Login() {
             <form onSubmit={login} method='POST'>
                 <h2>Welcome to {VITE_COMMUNITY_NAME}!</h2>
                 <label htmlFor="username">username</label>
-                <input className="formItem" type="text" name="username" id="username" maxLength={+VITE_USERNAME_MAX_LENGTH} minLength={+VITE_USERNAME_MIN_LENGTH}></input>
+                <input className="formItem" type="text" name="username" id="username" maxLength={+VITE_USERNAME_MAX_LENGTH} minLength={+VITE_USERNAME_MIN_LENGTH} required></input>
                 <br />
                 <label htmlFor="password">password</label>
-                <input className="formItem" type="password" name="password" id="password" maxLength={+VITE_PASSWORD_MAX_LENGTH} minLength={+VITE_PASSWORD_MIN_LENGTH}></input>
+                <input className="formItem" type="password" name="password" id="password" maxLength={+VITE_PASSWORD_MAX_LENGTH} minLength={+VITE_PASSWORD_MIN_LENGTH} required></input>
                 <br />
                 <div style={{display: "flex", alignItems: "center", justifyContent: "center"}}>
                     <LoginButton />
