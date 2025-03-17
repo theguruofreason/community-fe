@@ -32,6 +32,7 @@ async function login(event: React.FormEvent) {
     const request: Request = new Request(loginUrl, {
         method: 'POST',
         body: JSON.stringify(requestBody),
+        mode: 'cors'
     });
     const res = await fetch(request);
     if (!res.ok) {
