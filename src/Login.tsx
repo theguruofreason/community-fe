@@ -70,27 +70,31 @@ export default function Login() {
         <div className="Login">
             <form onSubmit={login} method="POST">
                 <h2>Welcome to {VITE_COMMUNITY_NAME}!</h2>
-                <label htmlFor="username">username</label>
-                <input
-                    className="formItem"
-                    type="text"
-                    name="username"
-                    id="username"
-                    maxLength={+VITE_USERNAME_MAX_LENGTH}
-                    minLength={+VITE_USERNAME_MIN_LENGTH}
-                    required
-                ></input>
+                <div>
+                    <label htmlFor="username">username</label>
+                    <input
+                        className="formItem"
+                        type="text"
+                        name="username"
+                        id="username"
+                        maxLength={+VITE_USERNAME_MAX_LENGTH}
+                        minLength={+VITE_USERNAME_MIN_LENGTH}
+                        required
+                    ></input>
+                </div>
                 <br />
-                <label htmlFor="password">password</label>
-                <input
-                    className="formItem"
-                    type="password"
-                    name="password"
-                    id="password"
-                    maxLength={+VITE_PASSWORD_MAX_LENGTH}
-                    minLength={+VITE_PASSWORD_MIN_LENGTH}
-                    required
-                ></input>
+                <div>
+                    <label htmlFor="password">password</label>
+                    <input
+                        className="formItem"
+                        type="password"
+                        name="password"
+                        id="password"
+                        maxLength={+VITE_PASSWORD_MAX_LENGTH}
+                        minLength={+VITE_PASSWORD_MIN_LENGTH}
+                        required
+                    ></input>
+                </div>
                 <br />
                 <div
                     style={{
