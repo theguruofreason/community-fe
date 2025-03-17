@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 const { VITE_SALT_ROUNDS, VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT } = import.meta.env;
 
 export default function Registration() {
@@ -27,27 +27,27 @@ export default function Registration() {
     }
 
     return (
-    <div className="Registration">
-        <h1>Register!</h1>
-        <form action={register}>
-            <label>
-                <span>username</span>
-                <input name="username" required />
-            </label>
-            <label>
-                <span>password</span>
-                <input name="password" type="password" required />
-            </label>
-            <label>
-                <span>email</span>
-                <input name="email" type="email" />
-            </label>
-            <label>
-                <span>name</span>
-                <input name="name" />
-            </label>
-            <button type="submit">Register</button>
-        </form>
-    </div>
+        <div className="Registration">
+            <h1>Register!</h1>
+            <form action={register}>
+                <label>
+                    <span>username</span>
+                    <input name="username" required />
+                </label>
+                <label>
+                    <span>password</span>
+                    <input name="password" type="password" required />
+                </label>
+                <label>
+                    <span>email</span>
+                    <input name="email" type="email" />
+                </label>
+                <label>
+                    <span>name</span>
+                    <input name="name" />
+                </label>
+                <button type="submit">Register</button>
+            </form>
+        </div>
     );
 }
