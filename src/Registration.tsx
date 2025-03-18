@@ -1,6 +1,4 @@
-import bcrypt from 'bcryptjs';
-const { VITE_SALT_ROUNDS, VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT } = import.meta
-    .env;
+const { VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT } = import.meta.env;
 
 export default function Registration() {
     async function register(formData: FormData) {
@@ -9,13 +7,10 @@ export default function Registration() {
             uname: formData.get('username'),
             email: formData.get('email'),
             name: formData.get('name'),
-            roles: [3]
+            pass: formData.get('password'),
+            roles: [3],
         };
         try {
-            const hash: string = await bcrypt.hash(
-                formData.get('password') as string,
-                +VITE_SALT_ROUNDS
-            );
             const port: string = VITE_BACKEND_PORT
                 ? ':' + VITE_BACKEND_PORT
                 : '';
@@ -24,12 +19,11 @@ export default function Registration() {
             );
             const body = {
                 ...fields,
-                pass: hash,
             };
             const req: Request = new Request(url, {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(body),
                 mode: 'cors',

@@ -26,13 +26,16 @@ async function login(event: React.FormEvent) {
 
     const port: string = VITE_BACKEND_PORT ? ':' + VITE_BACKEND_PORT : '';
     const loginUrl: URL = new URL(
-        'https://' + VITE_BACKEND_DOMAIN + port + '/login'
+        'http://' + VITE_BACKEND_DOMAIN + port + '/login'
     );
     const requestBody = { uname: username, pass: password };
     const request: Request = new Request(loginUrl, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify(requestBody),
-        mode: 'cors'
+        mode: 'cors',
     });
     const res = await fetch(request);
     if (!res.ok) {
