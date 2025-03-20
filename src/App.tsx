@@ -15,6 +15,9 @@ function App() {
                 <Link to="/login" className="nav-item">
                     Login
                 </Link>
+                <Link to="/register" className="nav-item">
+                    Register
+                </Link>
             </nav>
             <Routes>
                 <Route path="/login" element={<Login />} />
