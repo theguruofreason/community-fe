@@ -55,7 +55,7 @@ export default function Registration() {
                 </label>
                 <label>
                     <span>name</span>
-                    <input name="name" />
+                    <input name="name" required />
                 </label>
                 <button type="submit">Register</button>
             </form>
