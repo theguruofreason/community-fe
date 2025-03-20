@@ -1,5 +1,5 @@
 import { useFormStatus } from 'react-dom';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router';
 
 const {
     VITE_USERNAME_MAX_LENGTH,
@@ -11,48 +11,11 @@ const {
     VITE_BACKEND_PORT,
 } = import.meta.env;
 
-async function login(event: React.FormEvent) {
-    event.preventDefault();
-    const target = event.target as typeof event.target & {
-        username: { value: string };
-        password: { value: string };
-    };
-    const username = target.username.value;
-    const password = target.password.value;
-    if (!username || !password) {
-        console.error('Login failed: username and password required.');
-        return null;
-    }
-
-    const port: string = VITE_BACKEND_PORT ? ':' + VITE_BACKEND_PORT : '';
-    const loginUrl: URL = new URL(
-        'http://' + VITE_BACKEND_DOMAIN + port + '/login'
-    );
-    const requestBody = { uname: username, pass: password };
-    const request: Request = new Request(loginUrl, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(requestBody),
-        mode: 'cors',
-    });
-    const res = await fetch(request);
-    if (!res.ok) {
-        console.error('Login failure');
-        return;
-    }
-}
-
 function LoginButton() {
-    const status = useFormStatus();
+    const { pending } = useFormStatus();
     return (
-        <button
-            className="login-register"
-            type="submit"
-            disabled={status.pending}
-        >
-            Login
+        <button className="login-register" type="submit" disabled={pending}>
+            {pending ? 'Logging in...' : 'Login'}
         </button>
     );
 }
@@ -70,10 +33,50 @@ function RegisterButton() {
 }
 
 export default function Login() {
+    const { state } = useLocation();
+    const fromRegistration = state?.fromRegistration;
+    const navigate = useNavigate();
+    async function login(event: React.FormEvent) {
+        event.preventDefault();
+        const target = event.target as typeof event.target & {
+            username: { value: string };
+            password: { value: string };
+        };
+        const username = target.username.value;
+        const password = target.password.value;
+        if (!username || !password) {
+            console.error('Login failed: username and password required.');
+            return null;
+        }
+
+        const port: string = VITE_BACKEND_PORT ? ':' + VITE_BACKEND_PORT : '';
+        const loginUrl: URL = new URL(
+            'http://' + VITE_BACKEND_DOMAIN + port + '/login'
+        );
+        const requestBody = { uname: username, pass: password };
+        const request: Request = new Request(loginUrl, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+            mode: 'cors',
+        });
+        const res = await fetch(request);
+        if (!res.ok) {
+            console.error('Login failure');
+            return;
+        }
+        navigate('/home');
+    }
+
     return (
         <div className="Login">
             <form onSubmit={login} method="POST">
                 <h2>Welcome to {VITE_COMMUNITY_NAME}!</h2>
+                <div hidden={!fromRegistration}>
+                    <h5>Registration successful! Please log in...</h5>
+                </div>
                 <div>
                     <label htmlFor="username">username</label>
                     <input
@@ -86,7 +89,6 @@ export default function Login() {
                         required
                     ></input>
                 </div>
-                <br />
                 <div>
                     <label htmlFor="password">password</label>
                     <input

@@ -1,6 +1,10 @@
-const { VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT } = import.meta.env;
+const { VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT, VITE_DEFAULT_ROLE } =
+    import.meta.env;
+import { useFormStatus } from 'react-dom';
+import { useNavigate } from 'react-router';
 
 export default function Registration() {
+    const navigate = useNavigate();
     async function register(formData: FormData) {
         'use server';
         const fields = {
@@ -8,7 +12,7 @@ export default function Registration() {
             email: formData.get('email'),
             name: formData.get('name'),
             pass: formData.get('password'),
-            roles: [3],
+            roles: [+VITE_DEFAULT_ROLE],
         };
         try {
             const port: string = VITE_BACKEND_PORT
@@ -35,6 +39,11 @@ export default function Registration() {
         } catch (e) {
             console.error(e);
         }
+        await navigate('/login', {
+            state: {
+                fromRegistration: true,
+            },
+        });
     }
 
     return (
@@ -57,8 +66,17 @@ export default function Registration() {
                     <span>name</span>
                     <input name="name" required />
                 </label>
-                <button type="submit">Register</button>
+                <RegisterButton />
             </form>
         </div>
+    );
+}
+
+function RegisterButton() {
+    const { pending } = useFormStatus();
+    return (
+        <button disabled={pending} type="submit">
+            {pending ? 'Registering...' : 'Register'}
+        </button>
     );
 }
