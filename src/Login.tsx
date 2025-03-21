@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router';
+import { Error } from './Error';
 
 const {
     VITE_USERNAME_MAX_LENGTH,
@@ -39,15 +40,6 @@ function FromRegistrationDiv({ display }: { display: boolean }) {
             <h5 style={{ margin: 0 }}>
                 Registration successful! Please log in...
             </h5>
-        </div>
-    ) : null;
-}
-
-function Error({ text }: { text: string | undefined }) {
-    const message = text;
-    return message ? (
-        <div>
-            <h5 style={{ margin: 0, color: 'red' }}>{message}</h5>
         </div>
     ) : null;
 }
