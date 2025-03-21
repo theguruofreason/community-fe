@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router';
 
@@ -32,10 +33,31 @@ function RegisterButton() {
     );
 }
 
+function FromRegistrationDiv({ display }: { display: boolean }) {
+    return display ? (
+        <div>
+            <h5 style={{ margin: 0 }}>
+                Registration successful! Please log in...
+            </h5>
+        </div>
+    ) : null;
+}
+
+function Error({ text }: { text: string | undefined }) {
+    const message = text;
+    return message ? (
+        <div>
+            <h5 style={{ margin: 0, color: 'red' }}>{message}</h5>
+        </div>
+    ) : null;
+}
+
 export default function Login() {
     const { state } = useLocation();
     const fromRegistration = state?.fromRegistration;
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
+
     async function login(event: React.FormEvent) {
         event.preventDefault();
         const target = event.target as typeof event.target & {
@@ -65,6 +87,7 @@ export default function Login() {
         const res = await fetch(request);
         if (!res.ok) {
             console.error('Login failure');
+            setErrorMessage(await res.text());
             return;
         }
         navigate('/home');
@@ -74,9 +97,7 @@ export default function Login() {
         <div className="Login">
             <form onSubmit={login} method="POST">
                 <h2>Welcome to {VITE_COMMUNITY_NAME}!</h2>
-                <div hidden={!fromRegistration}>
-                    <h5>Registration successful! Please log in...</h5>
-                </div>
+                <FromRegistrationDiv display={fromRegistration} />
                 <div>
                     <label htmlFor="username">username</label>
                     <input
@@ -101,7 +122,7 @@ export default function Login() {
                         required
                     ></input>
                 </div>
-                <br />
+                <Error text={errorMessage} />
                 <div
                     style={{
                         display: 'flex',
