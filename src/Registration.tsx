@@ -1,10 +1,18 @@
 const { VITE_BACKEND_DOMAIN, VITE_BACKEND_PORT, VITE_DEFAULT_ROLE } =
     import.meta.env;
+import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useNavigate } from 'react-router';
+import { Error } from './Error';
 
 export default function Registration() {
     const navigate = useNavigate();
+    const [errorMessage, setErrorMessage] = useState('');
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+
     async function register(formData: FormData) {
         'use server';
         const fields = {
@@ -35,6 +43,8 @@ export default function Registration() {
             const response: Response = await fetch(req);
             if (!response.ok) {
                 console.error(response.status, response.statusText);
+                setErrorMessage(await response.text());
+                return;
             }
         } catch (e) {
             console.error(e);
@@ -52,20 +62,42 @@ export default function Registration() {
             <form action={register}>
                 <label>
                     <span>username</span>
-                    <input name="username" required />
+                    <input
+                        name="username"
+                        value={username}
+                        onChange={(e) => setUsername(e.target.value)}
+                        required
+                    />
                 </label>
                 <label>
                     <span>password</span>
-                    <input name="password" type="password" required />
+                    <input
+                        name="password"
+                        type="password"
+                        value={password}
+                        onChange={(e) => setPassword(e.target.value)}
+                        required
+                    />
                 </label>
                 <label>
                     <span>email</span>
-                    <input name="email" type="email" />
+                    <input
+                        name="email"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                    />
                 </label>
                 <label>
                     <span>name</span>
-                    <input name="name" required />
+                    <input
+                        name="name"
+                        value={name}
+                        required
+                        onChange={(e) => setName(e.target.value)}
+                    />
                 </label>
+                <Error text={errorMessage} />
                 <RegisterButton />
             </form>
         </div>
