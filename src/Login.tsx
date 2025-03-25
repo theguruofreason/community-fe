@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { useFormStatus } from 'react-dom';
 import { useLocation, useNavigate } from 'react-router';
 import { Error } from './Error';
+import { useAuth } from './Auth';
 
 const {
     VITE_USERNAME_MAX_LENGTH,
@@ -9,8 +9,6 @@ const {
     VITE_PASSWORD_MAX_LENGTH,
     VITE_PASSWORD_MIN_LENGTH,
     VITE_COMMUNITY_NAME,
-    VITE_BACKEND_DOMAIN,
-    VITE_BACKEND_PORT,
 } = import.meta.env;
 
 function LoginButton() {
@@ -45,49 +43,17 @@ function FromRegistrationDiv({ display }: { display: boolean }) {
 }
 
 export default function Login() {
+    const { errorMessage, userInfo, onLogin } = useAuth();
+    const navigate = useNavigate();
     const { state } = useLocation();
     const fromRegistration = state?.fromRegistration;
-    const navigate = useNavigate();
-    const [errorMessage, setErrorMessage] = useState('');
-
-    async function login(event: React.FormEvent) {
-        event.preventDefault();
-        const target = event.target as typeof event.target & {
-            username: { value: string };
-            password: { value: string };
-        };
-        const username = target.username.value;
-        const password = target.password.value;
-        if (!username || !password) {
-            console.error('Login failed: username and password required.');
-            return null;
-        }
-
-        const port: string = VITE_BACKEND_PORT ? ':' + VITE_BACKEND_PORT : '';
-        const loginUrl: URL = new URL(
-            'http://' + VITE_BACKEND_DOMAIN + port + '/login'
-        );
-        const requestBody = { uname: username, pass: password };
-        const request: Request = new Request(loginUrl, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-            mode: 'cors',
-        });
-        const res = await fetch(request);
-        if (!res.ok) {
-            console.error('Login failure');
-            setErrorMessage(await res.text());
-            return;
-        }
+    if (userInfo) {
         navigate('/home');
     }
 
     return (
         <div className="Login">
-            <form onSubmit={login} method="POST">
+            <form onSubmit={onLogin} method="POST">
                 <h2>Welcome to {VITE_COMMUNITY_NAME}!</h2>
                 <FromRegistrationDiv display={fromRegistration} />
                 <div>
