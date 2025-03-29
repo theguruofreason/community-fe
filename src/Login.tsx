@@ -81,13 +81,7 @@ export default function Login() {
                     ></input>
                 </div>
                 <Error text={errorMessage} />
-                <div
-                    style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                    }}
-                >
+                <div className="flex-center form-buttons">
                     <LoginButton />
                     <RegisterButton />
                 </div>
